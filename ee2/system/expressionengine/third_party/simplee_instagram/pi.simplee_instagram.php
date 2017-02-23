@@ -14,14 +14,16 @@
 	class Simplee_instagram {
 		public $get = array();
 		public $client_id = null;
+		public $access_token = null;
 		
 		public $plugin_name = "SimplEE Instagram";
     
 		public function __construct(){
-			$this->client_id = (ee()->TMPL->fetch_param('client_id') != "" ? ee()->TMPL->fetch_param('client_id') : INSTAGRAM_DEVELOPER_ID);
+			$this->client_id = (ee()->TMPL->fetch_param('client_id') != "" ? ee()->TMPL->fetch_param('client_id') : INSTAGRAM_CLIENT_ID);
+			$this->access_token = (ee()->TMPL->fetch_param('access_token') != "" ? ee()->TMPL->fetch_param('access_token') : INSTAGRAM_ACCESS_TOKEN);
 		
-    		if($this->client_id == "")
-    			ee()->output->show_user_error('general', $this->plugin_name.": Must enter Instagram client id in system/third_party/simplee_instagram/config.php");
+			if($this->client_id == "" || $this->access_token == "")
+				ee()->output->show_user_error('general', $this->plugin_name.": Client ID and Access Token required.");
 		}
 		
 		function comments(){
@@ -129,6 +131,7 @@
 		private function instagram_url($segment, $get = NULL){
 			$get = isset($get) ? $get : $this->get;
 			$get['client_id'] = $this->client_id;
+			$get['access_token'] = $this->access_token;
 			$base = "https://api.instagram.com/v1/".$segment;
 			return $base."?".http_build_query($get);
 		}
