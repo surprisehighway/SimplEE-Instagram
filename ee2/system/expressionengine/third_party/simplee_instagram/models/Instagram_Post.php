@@ -54,8 +54,11 @@
 			
 			$this->likes = $json->likes->count;
 			$this->comment_count = $json->comments->count;
-			foreach($json->comments->data as $comment){
-				array_push($this->comments, new Instagram_Comment($comment));
+
+			if(isset($json->comments->data)) {
+				foreach($json->comments->data as $comment){
+					array_push($this->comments, new Instagram_Comment($comment));
+				}
 			}
 			$this->comments = array_reverse($this->comments);
 		}
